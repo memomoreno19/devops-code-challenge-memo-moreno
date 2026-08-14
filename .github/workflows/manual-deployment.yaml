@@ -1,0 +1,47 @@
+name: Manual deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Select the environment to deploy to
+        required: true
+        default: DEV
+        type: choice
+        options:
+          - DEV
+          - STG
+          - PRD
+      aws_region:
+        description: Select the AWS region to deploy to
+        required: true
+        default: us-east-1
+        type: choice
+        options:
+          - us-east-1
+          - us-west-2
+      image_tag:
+        description: Enter the image tag to deploy
+        required: false
+        default: latest
+        type: string
+
+jobs:
+  summary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display deployment summary
+        run: |
+          echo "Deployment Summary:"
+          echo "Repository: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "SHA: ${{ github.sha }}"
+          echo "Actor: ${{ github.actor }}"
+
+          echo "Environment: ${{ inputs.environment }}"
+          echo "AWS Region: ${{ inputs.aws_region }}"
+          echo "Image Tag: ${{ inputs.image_tag }}"
+
+          echo "UTC: $(date -u +'%Y-%m-%d %H:%M:%S')"
+          echo "Houston: $(TZ="America/Chicago" date +'%Y-%m-%d %H:%M:%S')"
+   
